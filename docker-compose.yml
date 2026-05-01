@@ -1,0 +1,43 @@
+services:
+  miraettsserver:
+    image: ghcr.io/yanorei32/mirae-tts-server:v0.1.0
+    hostname: miraettsserver
+    container_name: miraettsserver${VARIANT:-}__miraettsserver
+
+    restart: unless-stopped
+
+    environment:
+      MAXIMUM_LENGTH: ${MAXIMUM_LENGTH:-512}
+
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+    networks:
+      - default
+
+  cloudflared:
+    image: cloudflare/cloudflared:2026.3.0
+    hostname: cloudflared
+    container_name: miraettsserver${VARIANT:-}__cloudflared
+
+    restart: unless-stopped
+
+    environment:
+      TUNNEL_LOGFILE: /dev/stdout
+
+    command: tunnel run --token ${TUNNEL_TOKEN}
+    user: root
+
+    deploy:
+      resources:
+        limits:
+          memory: 4096m
+
+    networks:
+      default:
+
+networks:
+  default:
+    name: miraettsserver${VARIANT:-}__default

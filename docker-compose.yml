@@ -18,7 +18,7 @@ services:
       - default
 
   cloudflared:
-    image: cloudflare/cloudflared:2026.5.0
+    image: cloudflare/cloudflared:2026.5.1
     hostname: cloudflared
     container_name: miraettsserver${VARIANT:-}__cloudflared
 
